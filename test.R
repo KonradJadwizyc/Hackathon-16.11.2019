@@ -1,3 +1,6 @@
 # test
-#konrad tu pisał 
+
+# dodaje linie kodu
+
 # i cos zmienial 
+
