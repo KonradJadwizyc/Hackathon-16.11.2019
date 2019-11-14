@@ -1,0 +1,60 @@
+library(randomForest)
+
+require(caTools)
+
+dataset_2 = as.data.frame(Titanic)
+
+str(dataset)
+
+dataset = dataset %>% mutate(
+  Sex = case_when(
+    Sex == "Male" ~ 1,
+    Sex == "Female" ~ 0),
+  Survived = case_when(
+    Survived == "Yes" ~ 1,
+    Survived == "No" ~ 0))
+dataset$Sex = as.numeric(dataset$Sex)
+dataset$Survived = as.numeric(dataset$Survived)
+summary(dataset)
+
+dataset = dataset %>% data.table
+
+# train = dataset
+# test = dataset
+train = dataset[Survived == "1"]
+test = dataset[Survived != "1"]
+
+Model_random_forest = randomForest(x = train,
+                                   y = train$Sex,
+                                   xtest = test,
+                                   ytest = test$Sex,
+                                   mtry = 2,
+                                   ntree = 25,
+                                   replace = T,
+                                   sampsize = 10,
+                                   nodesize = 30,
+                                   keep.forest = T)
+
+vec_2 = predict(Model_random_forest,test)
+
+dataset = cbind(vec_2,dataset)
+
+dataset$vec = NULL
+dataset$vec = NULL
+dataset$vec = NULL
+dataset$vec = NULL
+dataset$vec = NULL
+
+
+
+plot(dataset$Class,dataset$vec_2)
+
+rf <- randomForest(Survived ~ ., data = dataset_2, ntree = 10)
+preds <- predict(rf, newdata = dataset_2, predict.all = TRUE)
+
+vec = preds$aggregate
+preds$individual
+
+
+dataset = cbind(vec_2,dataset)
+dataset_2 = cbind(vec,dataset_2)
