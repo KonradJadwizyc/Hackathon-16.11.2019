@@ -1,3 +1,6 @@
 # test
+
 # dodaje linie kodu
-# dodaje kolejna zeby zrobic konflikt
+
+# i cos zmienial 
+
