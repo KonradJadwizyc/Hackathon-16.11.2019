@@ -58,3 +58,9 @@ preds$individual
 
 dataset = cbind(vec_2,dataset)
 dataset_2 = cbind(vec,dataset_2)
+
+# cost ama sfsdgfergasdkfnv aergfsdKValshfuv
+
+
+
+
