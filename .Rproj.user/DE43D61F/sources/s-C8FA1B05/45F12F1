@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1573767002998.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "45F12F1",
+    "lastKnownWriteTime" : 1573767539,
+    "last_content_update" : 1573767539774,
+    "path" : "C:/Projekty/Hackaton/Przygotowanie/codes/Hackathon-16.11.2019/test.R",
+    "project_path" : "test.R",
+    "properties" : {
+        "cursorPosition" : "2,37",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
