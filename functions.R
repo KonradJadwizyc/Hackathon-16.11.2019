@@ -664,7 +664,7 @@ get_save_xlsx_filename<-function(folder_save){
   
 }
 
-save_xlsx_view <- function (df,folder_save= "C:/ad_hoc_files/save_xlsx_files"){
+save_xlsx_view <- function (df,folder_save= AD_HOC_FILES){
   
   
   
@@ -1043,14 +1043,14 @@ na.replace<- function(df, replacement="colmean"){
 }
 
 
-save_csv_email <- function (df,folder_save= "C:/ad_hoc_files/save_xlsx_files"){
+save_csv_email <- function (df,folder_save= AD_HOC_FILES){
   
   full_filename<- get_save_xlsx_filename(folder_save)
   full_filename<- stringi::stri_replace_all_fixed(full_filename, '.xlsx','.csv')
   write.csv2(df,full_filename)
   send_email_file(full_filename)
 }
-save_xlsx_email <- function (df,folder_save= "C:/ad_hoc_files/save_xlsx_files"){
+save_xlsx_email <- function (df,folder_save= AD_HOC_FILES){
   
   full_filename<- get_save_xlsx_filename(folder_save)
   openxlsx::write.xlsx(df,full_filename)
