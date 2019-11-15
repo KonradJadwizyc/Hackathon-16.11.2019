@@ -1088,7 +1088,7 @@ get_save_xlsx_filename<-function(folder_save){
   
   return(full_filename)
 }
-save_xlsx_view <- function (df,folder_save= "C:/ad_hoc_files/save_xlsx_files"){
+save_xlsx_view <- function (df,folder_save= AD_HOC_FILES){
   
   full_filename<- get_save_xlsx_filename(folder_save)
   openxlsx::write.xlsx(df,full_filename)
