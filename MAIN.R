@@ -17,7 +17,10 @@
       if( !endsWith(cur_dir, '/'))  { cur_dir<-paste0(cur_dir,'/')}
       ROOT<- stri_replace_all_fixed( cur_dir, 'codes/', '')
       rm(cur_dir)
-      source(paste0(ROOT, 'codes/config/setup_personal.R' ))
+      if (file.exists(paste0(ROOT, 'codes/config/setup_personal.R' ))){
+      source(paste0(ROOT, 'codes/config/setup_personal.R' ))}else{
+        warning('zapytaj Krzycha o mozliwosc wysylania maila automatycznie')
+      }
 
 
 
