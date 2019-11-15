@@ -27,7 +27,7 @@
 # library(RJDBC)
 
 
-required_packages<-c('DALEX','xgboost',"openxlsx","dplyr","lubridate","htmltools","leaflet","data.table",
+required_packages<-c('Hmisc' , 'ggplot2', 'purrr','DALEX','xgboost',"openxlsx","dplyr","lubridate","htmltools","leaflet","data.table",
                      "XML","xml2","pracma","geosphere", "forecast", "sp", "magrittr","zoo", 'dbscan',
                      "SearchTrees",'rgdal', 'stringi', 'parallel', 'pbapply','odbc','RJDBC','tidyr','httr')
 install_and_load_packages(required_packages)
