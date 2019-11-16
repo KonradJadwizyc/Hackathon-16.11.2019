@@ -32,7 +32,7 @@ ROOT_OUTPUT<- paste0(ROOT , 'output/')
 
 source(paste0(ROOT_CODES,'functions.R'))
 source(paste0(ROOT_CODES,'packages.R'))
-source(paste0(ROOT_CODES,'functions_marketing.R'))
 source(paste0(ROOT_CODES,'load_data.R'))
 
 
+source(paste0(ROOT_CODES,'model.R'))
