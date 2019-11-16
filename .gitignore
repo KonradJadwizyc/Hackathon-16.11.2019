@@ -1,4 +1,9 @@
 .Rproj.user
 .Rhistory
 .RData
+<<<<<<< HEAD
 .Ruserdata
+=======
+.Ruserdata
+output/**
+>>>>>>> 684d5f9ec9dbed7f6c162fca9fa698422a483f16
