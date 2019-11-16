@@ -1,0 +1,108 @@
+
+
+
+
+# ==========================[ Setup ]====================================
+      rm(list= ls())
+      gc()
+     # time_measure_start<- proc.time()
+      DSN_NAME<-'Netezza' # for windows  |||||   'NZSQL' # linux name
+      
+      ROOT<- 'C:/Users/jadwiko/Desktop/Projekty/Model scoringowy/model_scoringowy/'
+      ROOT_CODES <- paste0(ROOT, 'codes/')
+      ROOT_DATA  <- paste0(ROOT, 'data/')
+      ROOT_OUTPUT<- paste0(ROOT, 'output/')
+      
+      
+      source(paste0( ROOT_CODES, 'functions.R'))
+      source(paste0( ROOT_CODES, 'proj_spec_function.R'))
+      source(paste0( ROOT_CODES, 'packages.R'))
+      
+      
+      top_perc= .100
+      SEED_NUMER<-NULL
+      SCORING_DATE<- as.character(ymd(today())) #"2019-05-09"
+      create_random_forrest_for_var_impo = T
+      
+
+      
+# ==========================[ Prepare + download data ]====================================      
+
+      # dataset dla jedniego dnia
+      source(paste0( ROOT_CODES, 'Model_scor_dla_1_day.R'))
+      source(paste0( ROOT_CODES, 'PrepareSkeleton.R'))
+      source(paste0( ROOT_CODES, 'paragony_1_day.R'))
+      source(paste0( ROOT_CODES, 'zablokowani_i_naruszenia.R'))
+      source(paste0( ROOT_CODES, 'ajenci.R'))
+      source(paste0( ROOT_CODES, 'punkty_1_day.R'))
+      source(paste0( ROOT_CODES, 'red_zapps_1_day.R'))
+      source(paste0( ROOT_CODES, 'lokalizacja_fraudu.R'))
+      
+      gc()
+      SKELETON$TARGET<- as.numeric((SKELETON$VIOLATION + SKELETON$BLOCKED) > 0 )
+      saveRDS(SKELETON,file = paste0(ROOT_OUTPUT,Sys.Date(),"cze_2_kopia_pobranych_danych.rds"))
+     #  warning("testowanie nadawanie flagi")
+     #  add_flag = "day"
+     # # source(paste0( ROOT_CODES, 'ReadData2.R'))
+     # 
+     #  source(paste0( ROOT_CODES, 'PrepareSkeleton.R'))
+     #  source(paste0( ROOT_CODES, 'zablokowani_i_naruszenia.R'))
+     #  #source(paste0( ROOT_CODES, 'podejrzane_ip.R'))
+     #  source(paste0( ROOT_CODES, 'ajenci.R'))
+     #  #source(paste0( ROOT_CODES, 'paragony.R'))
+     #  source(paste0( ROOT_CODES, 'punkty.R'))
+     #  source(paste0( ROOT_CODES, 'redukcja_zappsow.R'))
+     #  source(paste0( ROOT_CODES, 'lokalizacja_fraudu.R'))
+     #  str(SKELETON)
+     #  
+     #  SKELETON[NR_KARTY_NFC == ""]
+      # ==========================[ Target and create model ]====================================      
+      
+      # gc()
+      # SKELETON$TARGET<- as.numeric((SKELETON$VIOLATION  + SKELETON$BLOCKED) > 0 )
+      SKELETON = readRDS(paste0(ROOT_OUTPUT,Sys.Date(),"_kopia_pobranych_danych.rds"))
+      
+      SKELETON$TARGET = na.zero(SKELETON$TARGET)
+      SKELETON = na.zero(SKELETON)
+      SKELETON %>% is.na()
+      stopifnot(complete.cases(SKELETON) == is.na(SKELETON))
+      
+      SKELETON = na.omit(SKELETON)
+      
+      dane_lin_reg_test = na.omit(dane_lin_reg_test)
+      dane_lin_reg_ucz = na.omit(dane_lin_reg_ucz)
+      str(SKELETON)
+      
+      #stopifnot(complete.cases(SKELETON) == )
+      
+      SKELETON %>% is.infinite()
+      head(SKELETON,n = 100)
+      source(paste0( ROOT_CODES, 'var_impo_2.R'))
+      create_tree_or_random_forest = "TREE"
+      operation <- readline(prompt = "drzewa, random forest, var_impot:  ") # dostepne opcje drzewa = drzewa, T = zmienne var_impo, FOREST = random forest
+      source(paste0( ROOT_CODES, 'model3_vol_2.R'))
+      create_random_forrest_for_var_impo = T
+      source(paste0( ROOT_CODES, 'querying_model.R'))
+      source(paste0( ROOT_CODES, 'funkcja_do_argumentacji.R'))
+      warning("What is your choice :")
+      just_me_flag <- T
+      operation2 <- readline(prompt = "Czy wybrano wazne zmienne:  ")
+      source(paste0( ROOT_CODES, 'OutputToCSV.R'))
+      
+      # time_measure_stop <- proc.time()
+      # print( sprintf( "Analiza wykonana w czasie: %.0f min.", (time_measure_stop - time_measure_start)[3]/60))
+      rm(list = ls())
+      gc()
+      
+      # ==================================[ weryfikacja raportu ]==================================================================
+      
+      RaportFraudowy = fread(paste0(ROOT_OUTPUT,"/20191002_RaportFraudowy_per_klient.csv"))
+      
+      
+      plot(RaportFraudowy$SCORING)
+      hist(RaportFraudowy$SCORING)
+      RaportFraudowy = RaportFraudowy %>% select(2:51)
+      
+      
+      write.xlsx(RaportFraudowy, file = paste0("C:/Users/jadwiko/Desktop/Projekty/Model scoringowy/specjalny/20191002_RaportFraudowy_per_klient.xlsx"))
+      

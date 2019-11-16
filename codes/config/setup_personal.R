@@ -1,0 +1,1 @@
+AD_HOC_FILES <- 'C:/Users/jadwiko/Desktop/poboczne rzeczy/tmp_xlsx'
