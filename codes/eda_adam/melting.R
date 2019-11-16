@@ -90,14 +90,14 @@ RESULTOS <- data.frame(city = ciities_f,
 
 
 RESULTOS %>% 
-  saveRDS("output_df_10.RData")
+  write.csv("output_df_1.csv")
 
 
 
 # explain -----------------------------------------------------------------
 
 explain_xgb <- explain(model = xgb_final, 
-                                    data = cleaned_known[-target_col],
+                                    data = as.matrix(cleaned_known[-target_col]),
                                     y = cleaned_known[[target_col]],
                                     label = " xgb ")
 
@@ -106,6 +106,13 @@ library("iBreakDown")
 
 mat <- xgb.importance (model = xgb_final)
 xgb.plot.importance (importance_matrix = mat[1:20])
+
+predict(explain_xgb, as.matrix(cleaned_unknown[4,-target_col]))
+
+shap_posek <- shap(explain_xgb, as.matrix(cleaned_unknown[4,-target_col]), B = 5)
+plot(shap_posek)
+
+shap_posek
 
 xgb_touristic <- ceteris_paribus(explain_xgb, as.matrix(cleaned_unknown[4,-target_col]))
 xgb_touristic
@@ -119,6 +126,11 @@ var_to_pl <- c("accommodations_per1k_given",
 plot(xgb_touristic, variables = var_to_pl) +
   show_observations(xgb_touristic, variables = var_to_pl) +
   ggtitle("Ceteris Paribus Profiles", "For the random forest model and the Titanic dataset")
+
+
+
+variable_importance(explain_xgb, type = "raw")
+
 # ols ---------------------------------------------------------------------
 
 
@@ -151,3 +163,5 @@ mean(abs(full_o$residual <- full_o$predicted - full_o$touristic_popularity))
 
 write.csv(data_cleaned,"./data/precessd/data_cleaned.csv")
 save_csv_email(data_cleaned)
+
+

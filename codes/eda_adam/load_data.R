@@ -56,3 +56,4 @@ udzielone_noclegi_turystom_zagranicznym_sum <- rowSums(osiemnascie[,from:to], na
 touristic <- full_data_2[!is.na(full_data_2$touristic_popularity),]
 
 brakujace <- setdiff(osiemnascie$city_n,touristic$city_n)
+
