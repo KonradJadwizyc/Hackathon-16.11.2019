@@ -72,7 +72,7 @@ lin_mod_attraction <- lm(target~. , data[,names_lin_mod])
 lin_mod_attraction %>% summary 
 # broom::tidy(lin_mod_attraction %>% summary ) %>% save_csv_email()
 
-pred_train<- predict( lin_mod_attraction,(data[-nr_ucz,])) %>% exp
+pred_train<- predict( lin_mod_attraction,(data)) %>% exp
 
 
 
@@ -84,7 +84,7 @@ pred = exp(predict( lin_mod_attraction,(data_test)))
 # save_output
 output_df_1 = data.frame('city' = data_test_city, 'touristic_popularity'=  pred)
 save(output_df_1,file= paste0(ROOT_CODES, 'output_df_1.RData'))
-
+# load(paste0(ROOT_CODES, 'output_df_1.RData'))
 
 
 
