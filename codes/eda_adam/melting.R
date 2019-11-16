@@ -62,7 +62,7 @@ dtest <- xgb.DMatrix(as.matrix(test[-target_col]), label = test[[target_col]])
 dfull <- xgb.DMatrix(as.matrix(cleaned_known[-target_col]), label = cleaned_known[[target_col]])
 
 
-params <- list(booster = "gbtree", objective = "reg:linear", max_depth=8, min_child_weight=12, subsample=0.6, colsample_bytree=0.8, eta=0.01)
+params <- list(booster = "gbtree", objective = "reg:linear", max_depth= 6, min_child_weight=12, subsample=0.6, colsample_bytree=0.8, eta=0.02)
 xgb1 <- xgb.train(params = params, data = dtrain, nrounds = 200, watchlist = list(val=dtest,train=dtrain), print_every_n = 10, early.stop.round = 30, maximize = F , eval_metric = "mae")
 
 xgbpred <- predict(xgb1, dtest)
@@ -90,7 +90,35 @@ RESULTOS <- data.frame(city = ciities_f,
 
 
 RESULTOS %>% 
-  saveRDS("output_df_1.RData")
+  saveRDS("output_df_10.RData")
+
+
+
+# explain -----------------------------------------------------------------
+
+explain_xgb <- explain(model = xgb_final, 
+                                    data = cleaned_known[-target_col],
+                                    y = cleaned_known[[target_col]],
+                                    label = " xgb ")
+
+library("iBreakDown")
+
+
+mat <- xgb.importance (model = xgb_final)
+xgb.plot.importance (importance_matrix = mat[1:20])
+
+xgb_touristic <- ceteris_paribus(explain_xgb, as.matrix(cleaned_unknown[4,-target_col]))
+xgb_touristic
+
+var_to_pl <- c("accommodations_per1k_given", 
+               "wikipedia_area", 
+               "DOCHODY_BUDZETOW_MIAST.Dochody_na_mieszkanca_ogolem",
+               "TARGOWISKA.Targowiska_sezonowe",
+               "KOMUNIKACJA_MIEJSKA.dlugosc_bus_pasow",
+               "safety_level_locality_mean")
+plot(xgb_touristic, variables = var_to_pl) +
+  show_observations(xgb_touristic, variables = var_to_pl) +
+  ggtitle("Ceteris Paribus Profiles", "For the random forest model and the Titanic dataset")
 # ols ---------------------------------------------------------------------
 
 
