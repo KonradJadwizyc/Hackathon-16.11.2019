@@ -1,6 +1,6 @@
 
-
-
+full_data$touristic_popularity
+full_data %>% filter(year == 2018 & is.na(touristic_popularity)) %>% select( nr_tourists)
 
 
 full_data<-full_data  %>%   
