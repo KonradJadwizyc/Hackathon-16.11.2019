@@ -1,4 +1,4 @@
-data<- full_data %>% select(-city)
+data<- full_data 
 
 data<-data %>% mutate(target = log(touristic_popularity)) %>% select( -touristic_popularity)
 
@@ -32,13 +32,14 @@ data<-data %>% mutate_at(.,.vars= colnames(data)[grepl("budzet_wydatki", colname
 data$accommodations_per1k_given<-log(data$accommodations_per1k_given+1)
 data$tourists_using_accommodation_per1k<-log(data$tourists_using_accommodation_per1k+1)
 
-data_test<-data %>% filter(!complete.cases(.))
+data_test<-data %>% filter(!complete.cases(.)) %>% filter(year == 2018)
 data<-data %>% filter(complete.cases(.))
 
 
+data_test_city<- data_test$city
+data_city<- data$city
 
-
-
+# data_test_city %>% save_csv_email()
 
 if (!all((data %>% lapply(.,class) %>% unlist ) %in% c('numeric','double'))) { 
   stop('zbior zawiera zmienne kategorialne')
@@ -53,7 +54,7 @@ xgb_data_test<- xgboost::xgb.DMatrix(as.matrix(data[-nr_ucz, ] %>% select (-targ
 
 params = list(
   eta = .01,
-  max_depth = 3
+  max_depth = 2
   
 )
 xgb_init<- xgboost(xgb_data_ucz, nrounds = 1000,params = params ,verbose=T)
@@ -65,6 +66,10 @@ feature_impo<-feature_impo
 
 names_lin_mod <- (feature_impo[,'Feature'] %>% head(15))[[1]]
 names_lin_mod<- c(names_lin_mod, 'target')
+
+
+
+
 
 
 # nr_ucz <- sample(1:59, 52 )
@@ -79,7 +84,21 @@ pred<- predict( lin_mod_attraction,(data[-nr_ucz,])) %>% exp
 predict( lin_mod_attraction,(data_test)) %>% exp
 
 
+predict( lin_mod_attraction,(data_test)) %>% exp
 
+
+pred = exp(predict( lin_mod_attraction,(data_test)))
+
+
+
+output_df_1 = data.frame('city' = data_test_city, 'touristic_popularity'=  pred)
+save(output_df_1,file= paste0(ROOT_CODES, 'output_df_1.RData'))
+
+
+
+
+
+bind_rows(data_test[,names_lin_mod],data[,names_lin_mod]) %>% View
 
 
 
@@ -98,14 +117,14 @@ predict( lin_mod_attraction,(data_test)) %>% exp
 
 # # # # Sprawdzanie wynikow  na losowej probie
 # results<- c()
-# for(i in 1:1000){ 
+# for(i in 1:1000){
 #   set.seed(i)
 #   nr_ucz <- sample(1:59, 58 )
-#   lin_mod_attraction <- lm(target~. , data[nr_ucz,names_lin_mod]) 
+#   lin_mod_attraction <- lm(target~. , data[nr_ucz,names_lin_mod])
 #   # data[nr_ucz,names_lin_mod] %>% View
 #   lin_mod_attraction %>% summary
 #   pred<- predict( lin_mod_attraction,(data[-nr_ucz,])) %>% exp
-#   
+# 
 #   obs <- data[-nr_ucz,]$target %>% exp
 #   results<- c(results,MAE(obs,pred) )
 # }
