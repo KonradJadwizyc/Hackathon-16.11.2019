@@ -18,3 +18,10 @@ library("ggplot2")
 plot(cp_titanic_rf, variables = c("age", "fare")) +
   show_observations(cp_titanic_rf, variables = c("age", "fare")) +
   ggtitle("Ceteris Paribus Profiles", "For the random forest model and the Titanic dataset")
+
+
+
+library("DALEX")
+johny_d <- archivist::aread("pbiecek/models/e3596")
+johny_d
+class(johny_d)
